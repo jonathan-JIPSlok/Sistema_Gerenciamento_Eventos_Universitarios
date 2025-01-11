@@ -3,6 +3,7 @@ import os
 from time import sleep
 
 from data_manipuling import load_json, save_json
+import system_functions
 
 # Criando o diretório data caso ele não exista
 os.makedirs('data', exist_ok=True)
@@ -14,8 +15,8 @@ FILE_USERS = 'data/users.json'
 DATA_USERS = load_json(FILE_USERS)
 
 # Verifica se o arquivo está vazio, caso esteja ele faz o usuário passar pelo processo de cadastro no primeiro uso.
-if len(DATA_USERS) == 0: 
-    pass
+if len(DATA_USERS) == 0:
+    system_functions.Coordenador(DATA_USERS, FILE_USERS).cadastrar()
 
 # Caso já tenha algo cadastrado, vamos para tela inícial em que o usuário decide se faz login ou sai
 else:
