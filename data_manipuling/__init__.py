@@ -1,6 +1,6 @@
 import json
 
-def load_json(file_path):
+def load_json(file_path:str):
     """
     Carrega um arquivo JSON e retorna um dicionário
     :param file_path: str: Caminho do arquivo JSON
@@ -11,7 +11,7 @@ def load_json(file_path):
     except FileNotFoundError:
             return {}
 
-def save_json(file_path, data):
+def save_json(file_path:str, data: dict):
     """
     Salva um dicionário em um arquivo JSON
     :param file_path: str: Caminho do arquivo JSON
