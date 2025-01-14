@@ -1,7 +1,7 @@
 from datetime import datetime
 from time import sleep
 
-from .utilidades import cabecalho, printar_opcoes, data_validacao
+from .utilidades import cabecalho, printar_opcoes, data_validacao, printar_eventos
 from data_manipuling import save_json, load_json
 
 class usuarios:
@@ -112,12 +112,6 @@ class usuarios:
                 print("Opção invalida!")
                 sleep(2)
 
-    def listar_eventos(self):
-        eventos = load_json("data/eventos.json")
-        for numero, evento in enumerate(list(eventos.keys())):
-            print(f"[{numero}] - {evento}")
-
-
         
 class aluno(usuarios):
     """
@@ -157,7 +151,8 @@ class Coordenador(usuarios):
         elif funcao == 1:
             self.atualizar_evento()
         elif funcao == 2:
-            self.listar_eventos()
+            printar_eventos(load_json("data/eventos.json"))
+            input(":")
 
     def cadastrar_evento(self):
         """
@@ -199,13 +194,54 @@ class Coordenador(usuarios):
                 sleep(1)
     
     def atualizar_evento(self):
-        sair = ""
+        user = ""
         while user != 'sair':
+            #mostra os eventos para atualizar
             cabecalho("Eventos")
-            self.listar_eventos()
-            print("\n[sair] para sair \n")
+
+            printar_eventos(load_json("data/eventos.json"))
+            print("\n[sair] Para sair \n")
             user = input("selecione um evento: ")
 
             if user == 'sair':
                 break
             
+            # Verifica o que o usuário vai querer fazer
+            elif user.isnumeric():
+
+                # Pega a escolha do usuário
+                evento_usuario = int(user)
+                cabecalho("Atualizar evento")
+                printar_opcoes(("Atualizar Data", "Atualizar número de vagas disponíveis"))
+                user = input("O que deseja: ")
+                
+                if user == "sair":
+                    break
+
+                #Atualiza uma data
+                elif user == "0":
+                    data = data_validacao(True)
+                    
+                    #Coletando e salvando dados
+                    eventos = load_json("data/eventos.json")
+                    eventos[list(eventos.keys())[evento_usuario]]["data"] = data
+                    save_json("data/eventos.json", eventos)
+                    print("Evento atualizado com sucesso!")
+                    sleep(1)
+                
+                #Se o usuário quiser mudar a quantidade máxima de pessoas
+                elif user == "1":
+                    quantidade = input("Qual o máximo de pessoas: ")
+
+                    #verifica se é númerico e faz a alteração
+                    if quantidade.isnumeric():
+                        eventos = load_json("data/eventos.json")
+                        eventos[list(eventos.keys())[evento_usuario]]["maximo de pessoas"] = int(quantidade)
+                        save_json("data/eventos.json", eventos)
+                    else:
+                        print("Dados inválidos!")
+                        sleep(1)
+
+            else:
+                print("Dados inválidos!")
+                sleep(1)
