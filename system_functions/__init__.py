@@ -82,7 +82,7 @@ class usuarios:
             senha = input("Senha: ").strip()
 
             #faz o login do usuário
-            if user in self.DATA_USERS and senha in self.DATA_USERS[user]["senha"]:
+            if user in self.DATA_USERS and senha == self.DATA_USERS[user]["senha"]:
                 self.USUARIO = {user:self.DATA_USERS[user]}
                 self.pagina_inicial()
             else:
